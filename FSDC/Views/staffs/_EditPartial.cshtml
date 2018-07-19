@@ -1,0 +1,68 @@
+﻿@model FSDC.Models.staff
+
+@{
+    Layout = null;
+}
+
+
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+            <h4 class="modal-title">Edit Contact</h4>
+        </div>
+        @using (Ajax.BeginForm("Edit", "staffs", null, new AjaxOptions { HttpMethod = "Post", OnSuccess = "UpdateSuccess" }, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.staff_id)
+
+                    <div class="form-group">
+                        <div class="col-md-offset-3 col-md-12">
+                            <label>First Name</label>
+                            @Html.EditorFor(model => model.fname, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.fname, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-3 col-md-12">
+                            <label>Last Name</label>
+                            @Html.EditorFor(model => model.lname, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.lname, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-3 col-md-12">
+                            <label>Position</label>
+                            @Html.DropDownList("position_id", null, "Select Position...", htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.position_id, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-3 col-md-12">
+                            <label>Projects</label>
+                            @Html.DropDownList("project_id", null, "Select Project...", htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.project_id, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <input type="submit" class="btn btn-primary" value="Save changes" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

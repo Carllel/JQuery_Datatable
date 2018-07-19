@@ -1,0 +1,138 @@
+﻿@model FSDC.Models.staff
+@using FSDC.Models;
+@{
+    Layout = null;
+
+    int sId = Model.staff_id;
+    int? pId = Model.project_id;
+
+    FSDCEntities db = new FSDCEntities();
+    List<staff_projects> assigned_projects = db.staff_projects.Where(p => p.staff_id == Model.staff_id).ToList();
+    int count = assigned_projects.Count();
+    var obj = (from s in db.staffs where s.staff_id == Model.staff_id select s.project_id).SingleOrDefault();
+}
+
+@{
+    if (count == 0 && obj == null)
+    {
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
+                    <h3 class="text-center">Details - @Model.fname @Model.lname</h3>
+                </div>
+                <div class="modal-body container-fluid">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            ID:
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.staff_id)
+                        </dd>
+                        <dt>
+                            Name:
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.fname)
+                            @Html.DisplayFor(model => model.lname)
+                        </dd>
+
+                        <dt>
+                            Position:
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.position.prosition_name)
+                        </dd>
+                    </dl>
+
+                    <div class="form-group col-sm-12">
+                        <div class="panel panel-info">
+                            <div class="panel-heading"><strong>Assigned Projects</strong></div>
+                            <div class="panel-body">
+                                <h5>
+                                    No projects assigned.
+                                </h5>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="form-actions no-color">
+                        @Html.HiddenFor(model => model.staff_id)
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
+                    <h3 class="text-center">Details - @Model.fname @Model.lname</h3>
+                </div>
+                <div class="modal-body container-fluid">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            ID:
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.staff_id)
+                        </dd>
+                        <dt>
+                            Name:
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.fname)
+                            @Html.DisplayFor(model => model.lname)
+                        </dd>
+
+                        <dt>
+                            Position:
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.position.prosition_name)
+                        </dd>
+                    </dl>
+
+                    <div class="form-group col-sm-12">
+                        <div class="panel panel-info">
+                            <div class="panel-heading"><strong>Assigned Projects</strong></div>
+                            <div class="panel-body">
+                                <ul>
+                                    <li>@Model.project.project_name</li>
+
+                                    @foreach (var i in assigned_projects)
+                                    {
+                                        <li>@i.project.project_name</li>
+                                    }
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="form-actions no-color">
+                        @Html.HiddenFor(model => model.staff_id)
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+
+}
+
+

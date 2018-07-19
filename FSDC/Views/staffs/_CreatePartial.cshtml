@@ -1,0 +1,61 @@
+﻿@model FSDC.Models.staff
+
+@{
+    Layout = null;
+}
+
+
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+            <h3 class="text-center">Add New Staff</h3>
+        </div>
+        @using (Ajax.BeginForm("Create", "staffs", null, new AjaxOptions { HttpMethod = "Post", OnSuccess = "CreateSuccess" }, new { @class = "form-horizontal", role = "form" }))
+        {
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        <div class="col-md-offset-3 col-md-12">
+                            <input class="form-control" placeholder="Firstname" name="fname" id="fname" type="text" value="" required="required">
+                            @Html.ValidationMessageFor(model => model.fname, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-3 col-md-12">
+                            <input class="form-control" placeholder="Lastname" name="lname" id="lname" type="text" value="" required="required">
+                            @Html.ValidationMessageFor(model => model.lname, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-3 col-md-12">
+                            @Html.DropDownList("position_id", null, "Select Position...", htmlAttributes: new { @class = "form-control",@required="required" })
+                            @Html.ValidationMessageFor(model => model.position_id, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-3 col-md-12">
+                            @Html.DropDownList("project_id", null, "Select Project...", htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.project_id, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <input type="submit" class="btn btn-success" value="Save" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

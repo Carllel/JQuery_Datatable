@@ -1,0 +1,175 @@
+﻿@model FSDC.Models.staff
+@using FSDC.Models;
+
+@{
+    ViewBag.Title = "AssignProject";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int Sid = Convert.ToInt32(Session["staff_id"]);
+    FSDCEntities db = new FSDCEntities();
+    List<project> proList = db.projects.ToList();
+    List<staff_projects> assigned_projects = db.staff_projects.Where(p => p.staff_id == Sid).ToList();
+}
+
+
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<br />
+<div class="container container-fluid">
+
+    @{
+        if (TempData["success"] != null)
+        {
+            <div class="alert alert-success alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Success!</strong> @TempData["success"]
+            </div>
+        }
+        if (TempData["error"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Error!</strong> @TempData["error"]
+            </div>
+        }
+    }
+
+    @using (Html.BeginForm("Assign", "staffs"))
+    {
+        @Html.AntiForgeryToken()
+        <div class="well col-sm-offset-3 col-sm-6">
+            <div class="form-horizontal">
+                <h2>Profile for @Model.fname @Model.lname</h2>
+
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            Staff ID:
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.staff_id)
+                        </dd>
+                        <dt>
+                            Position:
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.position.prosition_name)
+                        </dd>
+
+                    </dl>
+                </div>
+
+                <div class="form-group">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><strong>My Assigned Projects</strong></div>
+                        <div class="panel-body">
+                            <table style="width:100%;" class="table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(model => model.project.project_name)
+                                        </td>
+                                        <td class="text-info">
+                                            Default
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody class="tbody">
+                                    <tr>
+                                        <th>
+
+                                        </th>
+                                        <th>
+
+                                        </th>
+                                    </tr>
+                                    @foreach (var i in assigned_projects)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @i.project.project_name
+                                            </td>
+
+                                            <td>
+                                                @*@Html.ActionLink(" Delete", "DeleteProject", "staffs", routeValues: null, htmlAttributes: new { id = "btnDelete", @class = "fa fa-trash" })*@
+                                                @*<a href="@Url.Action("DeleteProject","staffs",new {id=@i.project.project_id })" class="btn-sm" id="btnDelete">
+                        <i class="fa fa-trash">  Delete</i>
+                    </a>*@
+                                                <a href="@Url.Action("DeleteProject","staffs")?id=@i.project.project_id" id="btnDelete">
+                                                    <i class="fa fa-trash">  Delete</i>
+                                                </a>
+                                                @*@Html.ActionLink(" delete", "DeleteProject", new { id = @i.project.project_id }, htmlAttributes: new { @class = "fa fa-trash" })*@
+
+                                                @*@Ajax.ActionLink(" delete", "DeleteProject", new { id = @i.project.project_id }, new AjaxOptions {
+                    Confirm="Are you cure?",
+                    HttpMethod="POST"
+
+                    })*@
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><strong>Available Projects</strong></div>
+                        <div class="panel-body">
+                            @foreach (var i in proList)
+                            {
+                                <input type="checkbox" data-toggle="toggle" value="@i.project_id" name="projeclist" /> @i.project_name<br />
+                            }
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-5">
+                        <input type="submit" value="Save Changes" class="btn btn-success" />
+                    </div>
+                    <div class="col-sm-5">
+                        @Html.ActionLink("Back to List", "Index")
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    }
+</div>
+
+
+@section Scripts {
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#btnDelete").on("click", function () {
+
+            var surl = $(this).data("url");
+
+            $.ajax({
+            type: "POST",
+            url: surl,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function () {
+                 alert("Data has been deleted.");
+            },
+            error: function () {
+                alert("Error while deleting data");
+            }
+        });
+
+        });
+</script>
+}

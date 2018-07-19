@@ -1,0 +1,56 @@
+﻿@model FSDC.Models.staff
+@using FSDC.Models;
+@{
+    Layout = null;
+
+}
+
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
+            <h4 class="text-center" id="deleteModal-label">Are you sure you want to delete @Model.fname @Model.lname?</h4>
+        </div>
+        <div class="modal-body container-fluid">
+            <dl class="dl-horizontal">
+                <dt>
+                    ID :
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.staff_id)
+                </dd>
+                <dt>
+                    Name :
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.fname)
+                    @Html.DisplayFor(model => model.lname)
+                </dd>
+                <dt>
+                    Position :
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.position.prosition_name)
+                </dd>
+            </dl>
+        </div>
+        <div class="modal-footer">
+            @using (Ajax.BeginForm("Delete", "staffs", new { id = Model.staff_id }, new AjaxOptions { HttpMethod = "Post", OnSuccess = "DeleteSuccess" }, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-actions no-color">
+                    @Html.HiddenFor(model => model.staff_id)
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+
